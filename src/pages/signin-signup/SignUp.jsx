@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { DefaultLayout } from "../../components/layout/DefaultLayout";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { CustomInput } from "../../custominput/CustomInput";
-
+import { postNewUser } from "../../helpers/axiosHelper";
+import { toast } from "react-toastify";
 const SignUp = () => {
   const [form, setForm] = useState({});
   const handleOnChange = (e) => {
@@ -13,8 +14,20 @@ const SignUp = () => {
       [name]: value,
     });
   };
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
+
+    const { confirmPassword, ...rest } = form;
+    if (confirmPassword !== rest.password) {
+      return alert("Password don't match");
+    }
+    const responsePending = postNewUser(rest);
+    toast.promise(responsePending, {
+      pending: "please wait ",
+    });
+
+    const { status, message } = await responsePending;
+    toast[status](message);
   };
 
   const inputs = [
