@@ -1,23 +1,20 @@
 import axios from "axios";
-const serverURL = import.meta.env.VITE_APP_ROOT_SERVER;
-const apiEP = serverURL + "/api/v1";
-const userEP = apiEP + "/users";
-
-export const postNewUser = async (obj) => {
-  try {
-    const { data } = await axios.post(userEP, obj);
-    return data;
-  } catch (error) {
-    return {
-      status: "error",
-      message: error.message,
-    };
-  }
+const getAccessJWT = () => {
+  return sessionStorage.getItem("accessJWT");
 };
-export const loginUser = async (obj) => {
+export const apiProcessor = async ({ method, url, data, isPrivate }) => {
+  const headers = {
+    Authorization: isPrivate ? getAccessJWT() : null(),
+  };
+
   try {
-    const { data } = await axios.post(userEP + "/login", obj);
-    return data;
+    const response = await axios({
+      method,
+      url,
+      data,
+      headers,
+    });
+    return response.data;
   } catch (error) {
     return {
       status: "error",
