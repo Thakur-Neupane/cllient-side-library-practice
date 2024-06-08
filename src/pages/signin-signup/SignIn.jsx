@@ -1,6 +1,9 @@
 import React from "react";
 import { DefaultLayout } from "../../components/layout/DefaultLayout";
 import { CustomInput } from "../../custominput/CustomInput";
+import { useRef } from "react";
+import { toast } from "react-toastify";
+import { Row, Col, Form, Button } from "react-bootstrap";
 
 const SignIn = () => {
   const emailRef = useRef("");
@@ -14,6 +17,7 @@ const SignIn = () => {
       return toast.error("Both field must be filled for SignIn");
     }
     const result = await loginUser({ email, password });
+    console.log(result);
   };
   const inputs = [
     {
@@ -22,7 +26,7 @@ const SignIn = () => {
       type: "email",
       required: true,
       placeholder: "thakur@gmail.com",
-      inputRef: emailRef,
+      inputref: emailRef,
     },
 
     {
@@ -30,17 +34,18 @@ const SignIn = () => {
       name: "password",
       type: "password",
       required: true,
-      placeholder: "thakur@gmail.com",
-      inputRef: passRef,
+      placeholder: "**********",
+      inputref: passRef,
     },
   ];
-  console.log("It's not rendering");
+
   return (
     <div>
       <DefaultLayout>
         <Row>
           <Col>
             <Form
+              onSubmit={handleOnSubmit}
               className="shadow-lg border p-5 rounded m-auto mt-4"
               style={{ width: "450px" }}
             >
